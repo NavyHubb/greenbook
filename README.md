@@ -51,7 +51,7 @@
      - scheduler를 통해 리뷰를 하나도 갖고 있지 않은 아카이브는 자동으로 삭제된다.
 
 ## ✅ ERD
-<img width="731" alt="Screenshot 2023-05-07 at 5 30 46 PM" src="https://user-images.githubusercontent.com/101810007/236666672-39cebd6a-fe27-4b27-a64c-1f54052263e6.png">
+<img width="758" alt="Screenshot 2023-05-08 at 10 51 56 AM" src="https://user-images.githubusercontent.com/101810007/236750663-3f2f64ac-3890-437b-8f0e-7680973694b4.png">
 
 ## ✅ Tech Stack
 - Java
