@@ -1,5 +1,6 @@
 package com.green.greenbook.domain.model;
 
+import com.green.greenbook.domain.form.SignUpForm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,5 +29,13 @@ public class Member extends BaseEntity {
     private String email;
     private String password;
     private String nickname;
+
+    public static Member from(SignUpForm form) {
+        return Member.builder()
+                .email(form.getEmail())
+                .password(form.getPassword())
+                .nickname(form.getNickname())
+                .build();
+    }
 
 }
