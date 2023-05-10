@@ -29,8 +29,6 @@ public class SignUpController {
             validate(errors);
         }
 
-        form.encryptPassword(form.getPassword());
-
         return ResponseEntity.ok(signUpService.signUp(form));
     }
 

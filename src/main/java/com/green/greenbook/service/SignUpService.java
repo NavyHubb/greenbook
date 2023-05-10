@@ -1,14 +1,16 @@
 package com.green.greenbook.service;
 
+import com.green.greenbook.domain.dto.MemberResponseDto;
 import com.green.greenbook.domain.form.SignUpForm;
 import com.green.greenbook.domain.model.Member;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.green.greenbook.exception.ErrorCode.ALREADY_REGISTERED_MEMBER;
+import static com.green.greenbook.exception.ErrorCode.ALREADY_REGISTERED_EMAIL;
 import static com.green.greenbook.exception.ErrorCode.ALREADY_REGISTERED_NICKNAME;
 
 @Service
@@ -18,17 +20,23 @@ public class SignUpService {
 
     private final MemberRepository memberRepository;
 
-    public String signUp(SignUpForm form) {
+    public MemberResponseDto signUp(SignUpForm form) {
         if (isEmailExistManager(form.getEmail())) {
-            throw new CustomException(ALREADY_REGISTERED_MEMBER);
+            throw new CustomException(ALREADY_REGISTERED_EMAIL);
         }
         if (isNicknameExistManager(form.getNickname())) {
             throw new CustomException(ALREADY_REGISTERED_NICKNAME);
         }
 
-        memberRepository.save(Member.from(form));
+        return Member.from(memberRepository.save(fromForm(form)));
+    }
 
-        return "회원가입이 완료되었습니다.";
+    private Member fromForm(SignUpForm form) {
+        return Member.builder()
+            .email(form.getEmail())
+            .password(new BCryptPasswordEncoder().encode(form.getPassword()))
+            .nickname(form.getNickname())
+            .build();
     }
 
     private boolean isEmailExistManager(String email) {

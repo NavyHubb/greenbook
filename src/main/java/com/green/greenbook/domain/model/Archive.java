@@ -21,6 +21,7 @@ public class Archive {
     @Column(name = "archive_id")
     private Long id;
 
+    @Builder.Default
     @OneToMany(mappedBy = "archive")
     private List<Review> reviewList =
             new ArrayList<>();
