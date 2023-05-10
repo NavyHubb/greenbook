@@ -9,13 +9,13 @@
 
 ## ✅ Features
 1. 회원 영역
-   - 회원 가입 & 탈퇴 (OAuth 2.0을 통한 소셜 로그인)
+   - 회원 가입 & 탈퇴
      - 사용자는 회원가입을 할 수 있다. 기본적으로 회원가입 시 사용자는 USER 권한을 부여받는다.
      - 회원 가입 시 이메일, 패스워드, 닉네임을 입력받는다.
      - 이메일과 닉네임은 unique 해야 하며 패스워드는 암호화하여 저장한다.
-     - 추가로 카카오를 통한 소셜로그인 기능을 제공한다.
    - 로그 인 & 아웃
      - 회원 가입 시 입력한 이메일과 패스워드가 일치하면 로그인에 성공한다.
+     - 로그인에 성공하면 JWT를 발급한다.
    - 스크랩 목록 조회
      - 로그인 한 사용자는 리뷰 스크랩 기능을 통해 등록한 스크랩 목록을 조회할 수 있다.
 2. 도서
@@ -54,8 +54,8 @@
 <img width="758" alt="Screenshot 2023-05-08 at 10 51 56 AM" src="https://user-images.githubusercontent.com/101810007/236750663-3f2f64ac-3890-437b-8f0e-7680973694b4.png">
 
 ## ✅ Tech Stack
-- Java
-- Spring Boot, Spring MVC, Spring Data JPA
+- Java(11)
+- Spring Boot(2.7.11), Spring MVC, Spring Data JPA
 - MySQL
 - JUnit5, Mockito
 - Gradle
