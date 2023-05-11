@@ -25,7 +25,7 @@
      - 전체 목록 조회 시 갯수가 많을 수 있으므로 paging 처리하여 결과를 반환한다.
    - 특정 아카이브 조회
      - 로그인하지 않은 사용자를 포함한 모든 사용자는 특정 아카이브를 조회할 수 있다.
-     - 아카이브 제목(도서명), 저자, 출판사, ISBN, 소개, 이미지URL, 조회수, 리뷰 목록이 조회된다.
+     - 아카이브 제목(도서명), 저자, 출판사, 좋아요 수, 리뷰 목록이 조회된다.
      - 조회 시 마다 조회수가 1만큼 증가한다.
      - 조회에 사용되는 검색 기능은 ElasticSearch를 사용한다.
    - 도서 정보 검색
@@ -51,7 +51,7 @@
      - scheduler를 통해 리뷰를 하나도 갖고 있지 않은 아카이브는 자동으로 삭제된다.
 
 ## ✅ ERD
-<img width="758" alt="Screenshot 2023-05-08 at 10 51 56 AM" src="https://user-images.githubusercontent.com/101810007/236750663-3f2f64ac-3890-437b-8f0e-7680973694b4.png">
+<img width="736" alt="Screenshot 2023-05-11 at 3 23 47 PM" src="https://github.com/NavyHubb/greenbook/assets/101810007/234e005e-e88b-464d-821b-32d9bc96ac09">
 
 ## ✅ Tech Stack
 - Java(11)
