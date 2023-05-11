@@ -1,6 +1,7 @@
 package com.green.greenbook.domain.model;
 
 import com.green.greenbook.domain.form.ArchiveForm;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,12 +10,16 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE archive SET deleted_at = current_timestamp WHERE archive_id = ?")
+@Where(clause = "deleted_at is null")
 public class Archive {
 
     @Id
@@ -30,14 +35,17 @@ public class Archive {
     private String title;
     private String author;
     private String publisher;
-    private long likes;
+    private long subscribeCnt;
+    private long likeCnt;
+    private LocalDateTime deletedAt;
 
-    static Archive from(ArchiveForm form) {
+    public static Archive from(ArchiveForm form) {
         return Archive.builder()
             .title(form.getTitle())
             .author(form.getAuthor())
             .publisher(form.getPublisher())
-            .likes(0)
+            .subscribeCnt(0)
+            .likeCnt(0)
             .build();
     }
 

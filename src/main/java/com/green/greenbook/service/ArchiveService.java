@@ -21,13 +21,7 @@ public class ArchiveService {
             throw new CustomException(ErrorCode.ALREADY_REGISTERED_BOOKTITLE);
         }
 
-        Archive archive = Archive.builder()
-            .title(form.getTitle())
-            .author(form.getAuthor())
-            .publisher(form.getPublisher())
-            .build();
-
-        return archiveRepository.save(archive);
+        return archiveRepository.save(Archive.from(form));
     }
 
     public Archive get(Long archiveId) {
