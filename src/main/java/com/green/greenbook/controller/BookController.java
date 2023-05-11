@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class BookController {
 
     @GetMapping("/book")
-    public List<BookVO> search(@RequestBody SearchForm form) {
+    public List<BookVO> searchList(@RequestBody SearchForm form) {
 
         String clientId = "o2E_K7nOKatROhYYz1RA";
         String clientSecret = "RnDZr28WGN";
