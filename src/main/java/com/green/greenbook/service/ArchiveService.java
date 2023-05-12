@@ -18,7 +18,7 @@ public class ArchiveService {
 
     public ArchiveResponseDto create(ArchiveResponseDto responseDto) {
         if (archiveRepository.findByTitle(responseDto.getTitle()).isPresent()) {
-            throw new CustomException(ErrorCode.ALREADY_REGISTERED_BOOKTITLE);
+            throw new CustomException(ErrorCode.ALREADY_REGISTERED_ISBN);
         }
 
         return archiveRepository.save(Archive.from(responseDto)).toServiceDto();

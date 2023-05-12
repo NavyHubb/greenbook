@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArchiveResponseDto {
 
+    private String isbn;
     private String title;
     private String author;
     private String publisher;

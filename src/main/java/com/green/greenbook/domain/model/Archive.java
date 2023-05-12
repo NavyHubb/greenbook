@@ -32,6 +32,7 @@ public class Archive {
     private List<Review> reviewList =
             new ArrayList<>();
 
+    private String isbn;
     private String title;
     private String author;
     private String publisher;
@@ -41,6 +42,7 @@ public class Archive {
 
     public static Archive from(ArchiveResponseDto responseDto) {
         return Archive.builder()
+            .isbn(responseDto.getIsbn())
             .title(responseDto.getTitle())
             .author(responseDto.getAuthor())
             .publisher(responseDto.getPublisher())
@@ -51,6 +53,7 @@ public class Archive {
 
     public ArchiveResponseDto toServiceDto() {
         return ArchiveResponseDto.builder()
+            .isbn(this.isbn)
             .title(this.title)
             .author(this.author)
             .publisher(this.publisher)
