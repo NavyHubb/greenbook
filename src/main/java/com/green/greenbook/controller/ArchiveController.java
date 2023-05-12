@@ -1,6 +1,7 @@
 package com.green.greenbook.controller;
 
-import com.green.greenbook.domain.form.ArchiveForm;
+import com.green.greenbook.domain.dto.ArchiveRequestDto;
+import com.green.greenbook.domain.dto.ArchiveResponseDto;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.service.ArchiveService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class ArchiveController {
     private final ArchiveService archiveService;
 
     @PostMapping
-    public ResponseEntity<Archive> create(@RequestBody ArchiveForm form) {
-        return ResponseEntity.ok(archiveService.create(form));
+    public ResponseEntity<ArchiveResponseDto> create(@RequestBody ArchiveRequestDto requestDto) {
+        return ResponseEntity.ok(archiveService.create(requestDto.toServiceDto()));
     }
 
     @GetMapping("/{archiveId}")
@@ -32,8 +33,8 @@ public class ArchiveController {
     }
 
     @PutMapping("/{archiveId}")
-    public ResponseEntity<Archive> update(@PathVariable Long archiveId, @RequestBody ArchiveForm form) {
-        return ResponseEntity.ok(archiveService.update(archiveId, form));
+    public ResponseEntity<ArchiveResponseDto> update(@PathVariable Long archiveId, @RequestBody ArchiveRequestDto requestDto) {
+        return ResponseEntity.ok(archiveService.update(archiveId, requestDto.toServiceDto()));
     }
 
     @DeleteMapping("/{archiveId}")

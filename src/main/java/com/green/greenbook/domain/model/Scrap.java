@@ -26,4 +26,5 @@ public class Scrap {
     @ManyToOne
     @JoinColumn(name = "review_id")
     private Review review;
+
 }

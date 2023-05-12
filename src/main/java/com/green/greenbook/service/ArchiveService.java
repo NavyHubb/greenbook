@@ -1,6 +1,6 @@
 package com.green.greenbook.service;
 
-import com.green.greenbook.domain.form.ArchiveForm;
+import com.green.greenbook.domain.dto.ArchiveResponseDto;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
@@ -16,24 +16,24 @@ public class ArchiveService {
 
     private final ArchiveRepository archiveRepository;
 
-    public Archive create(ArchiveForm form) {
-        if (archiveRepository.findByTitle(form.getTitle()).isPresent()) {
+    public ArchiveResponseDto create(ArchiveResponseDto responseDto) {
+        if (archiveRepository.findByTitle(responseDto.getTitle()).isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_REGISTERED_BOOKTITLE);
         }
 
-        return archiveRepository.save(Archive.from(form));
+        return archiveRepository.save(Archive.from(responseDto)).toServiceDto();
     }
 
     public Archive get(Long archiveId) {
         return getArchive(archiveId);
     }
 
-    public Archive update(Long archiveId, ArchiveForm form) {
+    public ArchiveResponseDto update(Long archiveId, ArchiveResponseDto responseDto) {
         Archive archive = getArchive(archiveId);
 
-        archive.update(form);
+        archive.update(responseDto);
 
-        return archiveRepository.save(archive);
+        return archiveRepository.save(archive).toServiceDto();
     }
 
     private Archive getArchive(Long archiveId) {

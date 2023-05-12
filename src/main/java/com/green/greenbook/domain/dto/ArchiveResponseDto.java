@@ -1,4 +1,4 @@
-package com.green.greenbook.domain.form;
+package com.green.greenbook.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArchiveForm {
+public class ArchiveResponseDto {
 
     private String title;
     private String author;

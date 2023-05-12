@@ -1,6 +1,6 @@
 package com.green.greenbook.domain.model;
 
-import com.green.greenbook.domain.form.ArchiveForm;
+import com.green.greenbook.domain.dto.ArchiveResponseDto;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,20 +39,28 @@ public class Archive {
     private long likeCnt;
     private LocalDateTime deletedAt;
 
-    public static Archive from(ArchiveForm form) {
+    public static Archive from(ArchiveResponseDto responseDto) {
         return Archive.builder()
-            .title(form.getTitle())
-            .author(form.getAuthor())
-            .publisher(form.getPublisher())
+            .title(responseDto.getTitle())
+            .author(responseDto.getAuthor())
+            .publisher(responseDto.getPublisher())
             .subscribeCnt(0)
             .likeCnt(0)
             .build();
     }
 
-    public Archive update(ArchiveForm form) {
-         this.title = form.getTitle();
-         this.author = form.getAuthor();
-         this.publisher = form.getPublisher();
+    public ArchiveResponseDto toServiceDto() {
+        return ArchiveResponseDto.builder()
+            .title(this.title)
+            .author(this.author)
+            .publisher(this.publisher)
+            .build();
+    }
+
+    public Archive update(ArchiveResponseDto responseDto) {
+         this.title = responseDto.getTitle();
+         this.author = responseDto.getAuthor();
+         this.publisher = responseDto.getPublisher();
 
          return this;
     }
