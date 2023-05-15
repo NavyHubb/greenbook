@@ -39,8 +39,7 @@ public class Archive {
     private String title;
     private String author;
     private String publisher;
-    private long subscribeCnt;
-    private long likeCnt;
+    private long heartCnt;
     private LocalDateTime deletedAt;
 
     public ArchiveDto toDto() {
@@ -50,8 +49,7 @@ public class Archive {
                 .title(this.title)
                 .author(this.author)
                 .publisher(this.publisher)
-                .subscribeCnt(this.subscribeCnt)
-                .likeCnt(this.likeCnt)
+                .heartCnt(0)
                 .build();
     }
 
@@ -62,8 +60,7 @@ public class Archive {
             .title(this.title)
             .author(this.author)
             .publisher(this.publisher)
-            .subscribeCnt(this.subscribeCnt)
-            .likeCnt(this.likeCnt)
+            .heartCnt(this.heartCnt)
             .build();
     }
 
@@ -73,6 +70,16 @@ public class Archive {
         this.publisher = publisher;
 
         return this;
+    }
+
+    public void plusHeart() {
+        this.heartCnt++;
+    }
+
+    public void minusHeart() {
+        if (this.heartCnt > 0) {
+            this.heartCnt--;
+        }
     }
 
 }

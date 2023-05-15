@@ -18,7 +18,6 @@ public class ArchiveResponse {
     private String title;
     private String author;
     private String publisher;
-    private long subscribeCnt;
-    private long likeCnt;
+    private long heartCnt;
 
 }

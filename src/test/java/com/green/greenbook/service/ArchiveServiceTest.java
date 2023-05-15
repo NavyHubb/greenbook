@@ -139,8 +139,7 @@ class ArchiveServiceTest {
                 .title(request.getTitle())
                 .author(request.getAuthor())
                 .publisher(request.getPublisher())
-                .subscribeCnt(0)
-                .likeCnt(0)
+                .heartCnt(0)
                 .build();
         archive.setId(1L);
 

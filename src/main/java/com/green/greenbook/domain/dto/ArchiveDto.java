@@ -19,8 +19,7 @@ public class ArchiveDto {
     private String title;
     private String author;
     private String publisher;
-    private long subscribeCnt;
-    private long likeCnt;
+    private long heartCnt;
 
     public ArchiveResponse toResponse() {
         return ArchiveResponse.builder()
@@ -28,8 +27,7 @@ public class ArchiveDto {
                 .title(this.title)
                 .author(this.author)
                 .publisher(this.publisher)
-                .subscribeCnt(this.subscribeCnt)
-                .likeCnt(this.likeCnt)
+                .heartCnt(this.heartCnt)
                 .build();
     }
 

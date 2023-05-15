@@ -33,8 +33,7 @@ public class ArchiveService {
                 .title(title)
                 .author(author)
                 .publisher(publisher)
-                .subscribeCnt(0)
-                .likeCnt(0)
+                .heartCnt(0)
                 .build();
     }
 
@@ -51,10 +50,8 @@ public class ArchiveService {
     }
 
     private Archive getArchive(Long archiveId) {
-        Archive archive = archiveRepository.findById(archiveId)
+        return archiveRepository.findById(archiveId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
-
-        return archive;
     }
 
     public String delete(Long archiveId) {
