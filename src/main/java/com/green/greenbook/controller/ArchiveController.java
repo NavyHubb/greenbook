@@ -1,7 +1,8 @@
 package com.green.greenbook.controller;
 
-import com.green.greenbook.domain.dto.ArchiveRequestDto;
-import com.green.greenbook.domain.dto.ArchiveResponseDto;
+import com.green.greenbook.domain.dto.ArchiveCreateRequest;
+import com.green.greenbook.domain.dto.ArchiveResponse;
+import com.green.greenbook.domain.dto.ArchiveUpdateRequest;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.service.ArchiveService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,10 @@ public class ArchiveController {
     private final ArchiveService archiveService;
 
     @PostMapping
-    public ResponseEntity<ArchiveResponseDto> create(@RequestBody ArchiveRequestDto requestDto) {
-        return ResponseEntity.ok(archiveService.create(requestDto.toServiceDto()));
+    public ResponseEntity<ArchiveResponse> create(@RequestBody ArchiveCreateRequest request) {
+        return ResponseEntity.ok(archiveService.create(
+                request.getIsbn(), request.getTitle(), request.getAuthor(), request.getPublisher())
+                .toResponse());
     }
 
     @GetMapping("/{archiveId}")
@@ -33,8 +36,8 @@ public class ArchiveController {
     }
 
     @PutMapping("/{archiveId}")
-    public ResponseEntity<ArchiveResponseDto> update(@PathVariable Long archiveId, @RequestBody ArchiveRequestDto requestDto) {
-        return ResponseEntity.ok(archiveService.update(archiveId, requestDto.toServiceDto()));
+    public ResponseEntity<ArchiveResponse> update(@PathVariable Long archiveId, @RequestBody ArchiveUpdateRequest requestDto) {
+        return ResponseEntity.ok(archiveService.update(archiveId, requestDto.getTitle(), requestDto.getAuthor(), requestDto.getPublisher()));
     }
 
     @DeleteMapping("/{archiveId}")

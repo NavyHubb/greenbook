@@ -1,6 +1,7 @@
 package com.green.greenbook.domain.model;
 
-import com.green.greenbook.domain.dto.ArchiveResponseDto;
+import com.green.greenbook.domain.dto.ArchiveResponse;
+import com.green.greenbook.domain.dto.ArchiveDto;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,15 +11,17 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE archive SET deleted_at = current_timestamp WHERE archive_id = ?")
+@SQLDelete(sql = "UPDATE archive SET deleted_at = now() WHERE archive_id = ?")
 @Where(clause = "deleted_at is null")
 public class Archive {
 
@@ -30,7 +33,7 @@ public class Archive {
     @Builder.Default
     @OneToMany(mappedBy = "archive")
     private List<Review> reviewList =
-            new ArrayList<>();
+        new ArrayList<>();
 
     private String isbn;
     private String title;
@@ -40,32 +43,36 @@ public class Archive {
     private long likeCnt;
     private LocalDateTime deletedAt;
 
-    public static Archive from(ArchiveResponseDto responseDto) {
-        return Archive.builder()
-            .isbn(responseDto.getIsbn())
-            .title(responseDto.getTitle())
-            .author(responseDto.getAuthor())
-            .publisher(responseDto.getPublisher())
-            .subscribeCnt(0)
-            .likeCnt(0)
-            .build();
+    public ArchiveDto toDto() {
+        return ArchiveDto.builder()
+                .reviewList(this.reviewList)
+                .isbn(this.isbn)
+                .title(this.title)
+                .author(this.author)
+                .publisher(this.publisher)
+                .subscribeCnt(this.subscribeCnt)
+                .likeCnt(this.likeCnt)
+                .build();
     }
 
-    public ArchiveResponseDto toServiceDto() {
-        return ArchiveResponseDto.builder()
+    public ArchiveResponse toResponse() {
+        return ArchiveResponse.builder()
+            .reviewList(this.reviewList)
             .isbn(this.isbn)
             .title(this.title)
             .author(this.author)
             .publisher(this.publisher)
+            .subscribeCnt(this.subscribeCnt)
+            .likeCnt(this.likeCnt)
             .build();
     }
 
-    public Archive update(ArchiveResponseDto responseDto) {
-         this.title = responseDto.getTitle();
-         this.author = responseDto.getAuthor();
-         this.publisher = responseDto.getPublisher();
+    public Archive update(String title, String author, String publisher) {
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
 
-         return this;
+        return this;
     }
 
 }

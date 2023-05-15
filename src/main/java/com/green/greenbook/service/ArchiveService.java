@@ -1,6 +1,7 @@
 package com.green.greenbook.service;
 
-import com.green.greenbook.domain.dto.ArchiveResponseDto;
+import com.green.greenbook.domain.dto.ArchiveResponse;
+import com.green.greenbook.domain.dto.ArchiveDto;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
@@ -16,29 +17,43 @@ public class ArchiveService {
 
     private final ArchiveRepository archiveRepository;
 
-    public ArchiveResponseDto create(ArchiveResponseDto responseDto) {
-        if (archiveRepository.findByTitle(responseDto.getTitle()).isPresent()) {
+    public ArchiveDto create(String isbn, String title, String author, String publisher) {
+        if (archiveRepository.findByIsbn(isbn).isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_REGISTERED_ISBN);
         }
 
-        return archiveRepository.save(Archive.from(responseDto)).toServiceDto();
+        Archive archive = createArchive(isbn, title, author, publisher);
+
+        return archiveRepository.save(archive).toDto();
+    }
+
+    private Archive createArchive(String isbn, String title, String author, String publisher) {
+        return Archive.builder()
+                .isbn(isbn)
+                .title(title)
+                .author(author)
+                .publisher(publisher)
+                .subscribeCnt(0)
+                .likeCnt(0)
+                .build();
     }
 
     public Archive get(Long archiveId) {
         return getArchive(archiveId);
     }
 
-    public ArchiveResponseDto update(Long archiveId, ArchiveResponseDto responseDto) {
+    public ArchiveResponse update(Long archiveId, String title, String author, String publisher) {
         Archive archive = getArchive(archiveId);
 
-        archive.update(responseDto);
+        archive.update(title, author, publisher);
 
-        return archiveRepository.save(archive).toServiceDto();
+        return archiveRepository.save(archive).toResponse();
     }
 
     private Archive getArchive(Long archiveId) {
         Archive archive = archiveRepository.findById(archiveId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
+
         return archive;
     }
 
