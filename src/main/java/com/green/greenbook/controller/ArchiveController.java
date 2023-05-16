@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/archive")
@@ -24,7 +26,7 @@ public class ArchiveController {
     private final ArchiveService archiveService;
 
     @PostMapping
-    public ResponseEntity<ArchiveResponse> create(@RequestBody ArchiveCreateRequest request) {
+    public ResponseEntity<ArchiveResponse> create(@RequestBody @Valid ArchiveCreateRequest request) {
         return ResponseEntity.ok(archiveService.create(
                 request.getIsbn(), request.getTitle(), request.getAuthor(), request.getPublisher())
                 .toResponse());
