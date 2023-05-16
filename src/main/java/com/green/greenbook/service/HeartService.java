@@ -36,7 +36,7 @@ public class HeartService {
                                     .member(member)
                                     .archive(archive)
                                     .build());
-        archive.plusHeart();
+        archive.plusHeart();  // TODO: Thread-safe 처리
         archiveRepository.save(archive);
     }
 
@@ -51,7 +51,7 @@ public class HeartService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HEART));
 
         heartRepository.delete(heart);
-        archive.minusHeart();
+        archive.minusHeart();  // TODO: Thread-safe 처리
         archiveRepository.save(archive);
     }
 

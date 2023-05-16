@@ -41,7 +41,6 @@ class HeartServiceTest {
     void create_fail_NOT_FOUND_MEMBER() {
         //given
         Member member = getMember();
-        Archive archive = getArchive();
 
         given(memberRepository.findById(member.getId()))
                 .willReturn(Optional.empty());
@@ -110,7 +109,6 @@ class HeartServiceTest {
     void delete_fail_NOT_FOUND_MEMBER() {
         //given
         Member member = getMember();
-        Archive archive = getArchive();
 
         given(memberRepository.findById(member.getId()))
                 .willReturn(Optional.empty());

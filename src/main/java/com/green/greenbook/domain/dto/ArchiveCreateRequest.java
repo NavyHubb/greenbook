@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArchiveCreateRequest {
 
-    @NotNull
+    @NotNull(message = "ISBN은 필수 입력값입니다.")
     private String isbn;
 
-    @NotNull
+    @NotNull(message = "도서명은 필수 입력값입니다.")
     private String title;
 
-    @NotNull
+    @NotNull(message = "저자는 필수 입력값입니다.")
     private String author;
 
-    @NotNull
+    @NotNull(message = "출판사는 필수 입력값입니다.")
     private String publisher;
 
 }
