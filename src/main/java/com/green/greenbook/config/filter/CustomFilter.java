@@ -10,9 +10,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/heart/*")
+@WebFilter(urlPatterns = {"/heart/*", "/review/*", "/scrap"})
 @RequiredArgsConstructor
-public class HeartFilter implements Filter {
+public class CustomFilter implements Filter {
 
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final MemberRepository memberRepository;
@@ -34,4 +34,5 @@ public class HeartFilter implements Filter {
 
         chain.doFilter(request, response);
     }
+
 }

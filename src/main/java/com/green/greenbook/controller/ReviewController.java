@@ -19,9 +19,9 @@ public class ReviewController {
 
     private final String TOKEN_NAME = "X-AUTH-TOKEN";
 
-    @PostMapping("/{archiveId}")
+    @PostMapping
     public ResponseEntity<?> create(@RequestHeader(name = TOKEN_NAME) String token,
-                                    @PathVariable Long archiveId,
+                                    @RequestParam Long archiveId,
                                     @RequestBody ReviewRequest request) {
         MemberDto dto = provider.getMemberDto(token);
         reviewService.create(archiveId, dto.getId(), request.getHead(), request.getContent());

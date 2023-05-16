@@ -53,4 +53,15 @@ public class Review extends BaseEntity {
                 .content(this.content)
                 .build();
     }
+
+    public void plusScrapCnt() {
+        this.scrapCnt++;
+    }
+
+    public void minusScrapCnt() {
+        if (this.scrapCnt > 0) {
+            this.scrapCnt--;
+        }
+    }
+
 }
