@@ -13,8 +13,8 @@ public enum ErrorCode {
     ALREADY_REGISTERED_BOOKTITLE(HttpStatus.BAD_REQUEST, "이미 등록된 도서명입니다."),
     ALREADY_REGISTERED_ISBN(HttpStatus.BAD_REQUEST, "이미 등록된 ISBN입니다."),
     ALREADY_REGISTERED_HEART(HttpStatus.BAD_REQUEST, "이미 등록된 하트입니다."),
-    ALREADY_REGISTERED_HEAD(HttpStatus.BAD_REQUEST, "이미 등록된 하트입니다."),
-    ALREADY_REGISTERED_SCRAP(HttpStatus.BAD_REQUEST, "이미 등록된 하트입니다."),
+    ALREADY_REGISTERED_HEAD(HttpStatus.BAD_REQUEST, "이미 등록된 제목입니다."),
+    ALREADY_REGISTERED_SCRAP(HttpStatus.BAD_REQUEST, "이미 등록된 스크랩입니다."),
 
     NOT_FOUND_MEMBER(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다."),
     NOT_FOUND_ARCHIVE(HttpStatus.BAD_REQUEST, "아카이브를 찾을 수 없습니다."),
