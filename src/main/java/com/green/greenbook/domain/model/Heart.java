@@ -12,11 +12,11 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Scrap {
+public class Heart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "scrap_id")
+    @Column(name = "heart_id")
     private Long id;
 
     @ManyToOne
@@ -24,7 +24,7 @@ public class Scrap {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "review_id")
-    private Review review;
+    @JoinColumn(name = "archive_id")
+    private Archive archive;
 
 }

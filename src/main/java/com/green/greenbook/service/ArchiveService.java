@@ -1,6 +1,7 @@
 package com.green.greenbook.service;
 
-import com.green.greenbook.domain.form.ArchiveForm;
+import com.green.greenbook.domain.dto.ArchiveResponse;
+import com.green.greenbook.domain.dto.ArchiveDto;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
@@ -16,30 +17,41 @@ public class ArchiveService {
 
     private final ArchiveRepository archiveRepository;
 
-    public Archive create(ArchiveForm form) {
-        if (archiveRepository.findByTitle(form.getTitle()).isPresent()) {
-            throw new CustomException(ErrorCode.ALREADY_REGISTERED_BOOKTITLE);
+    public ArchiveDto create(String isbn, String title, String author, String publisher) {
+        if (archiveRepository.findByIsbn(isbn).isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_REGISTERED_ISBN);
         }
 
-        return archiveRepository.save(Archive.from(form));
+        Archive archive = createArchive(isbn, title, author, publisher);
+
+        return archiveRepository.save(archive).toDto();
+    }
+
+    private Archive createArchive(String isbn, String title, String author, String publisher) {
+        return Archive.builder()
+                .isbn(isbn)
+                .title(title)
+                .author(author)
+                .publisher(publisher)
+                .heartCnt(0)
+                .build();
     }
 
     public Archive get(Long archiveId) {
         return getArchive(archiveId);
     }
 
-    public Archive update(Long archiveId, ArchiveForm form) {
+    public ArchiveResponse update(Long archiveId, String title, String author, String publisher) {
         Archive archive = getArchive(archiveId);
 
-        archive.update(form);
+        archive.update(title, author, publisher);
 
-        return archiveRepository.save(archive);
+        return archiveRepository.save(archive).toResponse();
     }
 
     private Archive getArchive(Long archiveId) {
-        Archive archive = archiveRepository.findById(archiveId)
+        return archiveRepository.findById(archiveId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
-        return archive;
     }
 
     public String delete(Long archiveId) {
