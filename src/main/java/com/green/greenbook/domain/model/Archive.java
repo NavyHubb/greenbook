@@ -44,7 +44,6 @@ public class Archive {
 
     public ArchiveDto toDto() {
         return ArchiveDto.builder()
-                .reviewList(this.reviewList)
                 .isbn(this.isbn)
                 .title(this.title)
                 .author(this.author)

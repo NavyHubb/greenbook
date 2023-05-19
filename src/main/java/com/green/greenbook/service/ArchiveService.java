@@ -8,6 +8,8 @@ import com.green.greenbook.exception.ErrorCode;
 import com.green.greenbook.property.ArchiveProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,20 @@ public class ArchiveService {
                 .publisher(publisher)
                 .heartCnt(0)
                 .build();
+    }
+
+    public Page<ArchiveDto> getAll(Pageable pageable) {
+        return toDtoList(archiveRepository.findAll(pageable));
+    }
+
+    public Page<ArchiveDto> toDtoList(Page<Archive> archiveList){
+        return archiveList.map(m -> ArchiveDto.builder()
+            .isbn(m.getIsbn())
+            .title(m.getTitle())
+            .author(m.getAuthor())
+            .publisher(m.getPublisher())
+            .heartCnt(m.getHeartCnt())
+            .build());
     }
 
     public Archive get(Long archiveId) {

@@ -1,12 +1,9 @@
 package com.green.greenbook.domain.dto;
 
-import com.green.greenbook.domain.model.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Getter
 @Builder
@@ -14,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ArchiveDto {
 
-    private List<Review> reviewList;
     private String isbn;
     private String title;
     private String author;
