@@ -72,14 +72,4 @@ public class Archive {
         return this;
     }
 
-    public void plusHeart() {
-        this.heartCnt++;
-    }
-
-    public void minusHeart() {
-        if (this.heartCnt > 0) {
-            this.heartCnt--;
-        }
-    }
-
 }

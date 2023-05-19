@@ -22,7 +22,11 @@ public enum ErrorCode {
     NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "리뷰를 찾을 수 없습니다."),
     NOT_FOUND_SCRAP(HttpStatus.BAD_REQUEST, "스크랩을 찾을 수 없습니다."),
 
+    TRANSACTION_LOCK(HttpStatus.BAD_REQUEST,"해당 객체는 사용 중입니다."),
+
     NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "인증 정보가 불일치합니다."),
+
+    EMPTY(HttpStatus.BAD_REQUEST, "삭제할 수량이 없습니다."),
 
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다.");
 

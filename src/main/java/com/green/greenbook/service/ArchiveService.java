@@ -5,6 +5,7 @@ import com.green.greenbook.domain.dto.ArchiveDto;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
+import com.green.greenbook.property.ArchiveProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArchiveService {
 
     private final ArchiveRepository archiveRepository;
+    private final ArchiveProperty archiveProperty;
+    private final RedissonService redissonService;
 
     public ArchiveDto create(String isbn, String title, String author, String publisher) {
         if (archiveRepository.findByIsbn(isbn).isPresent()) {
@@ -23,6 +26,9 @@ public class ArchiveService {
         }
 
         Archive archive = createArchive(isbn, title, author, publisher);
+
+        String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
+        redissonService.setHeartCnt(key, 0);
 
         return archiveRepository.save(archive).toDto();
     }

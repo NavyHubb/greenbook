@@ -5,21 +5,27 @@ import com.green.greenbook.domain.model.Heart;
 import com.green.greenbook.domain.model.Member;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
+import com.green.greenbook.property.ArchiveProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import com.green.greenbook.repository.HeartRepository;
 import com.green.greenbook.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class HeartService {
 
     private final HeartRepository heartRepository;
     private final MemberRepository memberRepository;
     private final ArchiveRepository archiveRepository;
+
+    private final ArchiveProperty archiveProperty;
+    private final RedissonService redissonService;
 
     public void create(Long memberId, Long archiveId) {
         Member member = memberRepository.findById(memberId)
@@ -36,8 +42,10 @@ public class HeartService {
                                     .member(member)
                                     .archive(archive)
                                     .build());
-        archive.plusHeart();  // TODO: Thread-safe 처리
-        archiveRepository.save(archive);
+
+        String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
+        redissonService.updateHeartCnt(key, true);
+        archive.setHeartCnt(redissonService.getHeartCnt(key));
     }
 
     public void delete(Long memberId, Long archiveId) {
@@ -51,8 +59,10 @@ public class HeartService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HEART));
 
         heartRepository.delete(heart);
-        archive.minusHeart();  // TODO: Thread-safe 처리
-        archiveRepository.save(archive);
+
+        String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
+        redissonService.updateHeartCnt(key, false);
+        archive.setHeartCnt(redissonService.getHeartCnt(key));
     }
 
 }

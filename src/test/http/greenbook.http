@@ -1,0 +1,159 @@
+### 회원가입
+POST http://localhost:8080/signUp
+Content-Type: application/json
+
+{
+  "email": "test2@naver.com",
+  "name": "string",
+  "password": "pass123!!",
+  "nickname": "patrick3"
+}
+
+### 로그인
+POST http://localhost:8080/signIn
+Content-Type: application/json
+
+{
+  "email": "test2@naver.com",
+  "password": "pass123!!"
+}
+
+<> 2023-05-16T110730.200.json
+<> 2023-05-15T210438.200.json
+<> 2023-05-15T171330.200.json
+<> 2023-05-15T153703.200.json
+
+### 도서 검색
+GET http://localhost:8080/book
+Content-Type: application/json
+
+{
+  "title": "해리포터"
+}
+
+<> 2023-05-10T154205.200.json
+
+### 아카이브 생성
+POST http://localhost:8080/archive
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ0ODAzNjQsImV4cCI6MTY4NDU2Njc2NH0.vunSeu_gNM6F7Rc7xvOrc5GQOhx_6DjNLRF3PsQnqb4
+
+{
+  "isbn": "11112222",
+  "author": "김성재",
+  "publisher": "민음사",
+  "title": "사랑이라 쓰고 나니 아모고토 못하겠다"
+}
+
+<> 2023-05-16T111422.200.json
+<> 2023-05-16T111142.400.json
+<> 2023-05-16T110919.400.json
+<> 2023-05-15T210446.400.json
+<> 2023-05-15T171347.200.json
+<> 2023-05-15T153714.200.json
+<> 2023-05-13T000735.200.json
+<> 2023-05-11T231211.200.json
+
+### 아카이브 삭제
+DELETE http://localhost:8080/archive/1
+
+<> 2023-05-13T000739.200.txt
+<> 2023-05-11T231222.200.txt
+<> 2023-05-11T231017.500.json
+
+### 아카이브 조회
+GET http://localhost:8080/archive/5
+
+<> 2023-05-16T205418.400.json
+<> 2023-05-11T231224.400.json
+<> 2023-05-11T231219.200.json
+<> 2023-05-11T170143.200.json
+
+### 하트 등록
+POST http://localhost:8080/heart
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ0ODAzNjQsImV4cCI6MTY4NDU2Njc2NH0.vunSeu_gNM6F7Rc7xvOrc5GQOhx_6DjNLRF3PsQnqb4
+
+{
+  "memberId": 1,
+  "archiveId": 1
+}
+
+### 하트 등록2
+POST http://localhost:8080/heart
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJTdWJIZUtVUlJyZVFZK1dTT25Ca3RnPT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ0NzY5ODgsImV4cCI6MTY4NDU2MzM4OH0.oWJP8kfLioLTpT_zvD0VHt8m9no-R-aU3TsHDaZCPp4
+
+{
+  "memberId": 2,
+  "archiveId": 1
+}
+
+
+<> 2023-05-16T111703.500.json
+<> 2023-05-16T111616.500.json
+<> 2023-05-16T111532.500.json
+<> 2023-05-16T110821.200.txt
+<> 2023-05-15T153948.400.json
+<> 2023-05-15T153942.400.json
+<> 2023-05-15T153921.200.txt
+<> 2023-05-15T153845.400.json
+
+### 하트 취소
+DELETE http://localhost:8080/heart
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ0ODAzNjQsImV4cCI6MTY4NDU2Njc2NH0.vunSeu_gNM6F7Rc7xvOrc5GQOhx_6DjNLRF3PsQnqb4
+
+{
+  "memberId": 1,
+  "archiveId": 1
+}
+
+### 하트 취소2
+DELETE http://localhost:8080/heart
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJTdWJIZUtVUlJyZVFZK1dTT25Ca3RnPT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ0NjMwODgsImV4cCI6MTY4NDU0OTQ4OH0.LORcFOSCo0a3u7Fk0nYSuejkArJW1jGEQbizu0QtJTE
+
+{
+  "memberId": 2,
+  "archiveId": 2
+}
+
+<> 2023-05-15T154015.200.txt
+<> 2023-05-15T154011.400.json
+
+### 리뷰 생성
+POST http://localhost:8080/review?archiveId=1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJRcDNIcWVtWFNHNFc3MDNKcXI0U3BnPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQxNTIyNzcsImV4cCI6MTY4NDIzODY3N30._1P27BZnZhD8RUBAtFIC0WCq4BsnOUBOcWwOUa-GXfs
+
+{
+  "head": "No jam",
+  "content": "d"
+}
+
+<> 2023-05-15T210758.200.txt
+<> 2023-05-15T210603.200.txt
+<> 2023-05-15T210556.500.json
+<> 2023-05-15T210506.200.txt
+
+### 리뷰 조회
+GET http://localhost:8080/review/4
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJRcDNIcWVtWFNHNFc3MDNKcXI0U3BnPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQxNTIyNzcsImV4cCI6MTY4NDIzODY3N30._1P27BZnZhD8RUBAtFIC0WCq4BsnOUBOcWwOUa-GXfs
+
+<> 2023-05-15T211217.200.json
+<> 2023-05-15T210814.200.json
+<> 2023-05-15T210624.200.json
+
+### 스크랩 등록
+POST http://localhost:8080/scrap/1
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJRcDNIcWVtWFNHNFc3MDNKcXI0U3BnPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQxNTIyNzcsImV4cCI6MTY4NDIzODY3N30._1P27BZnZhD8RUBAtFIC0WCq4BsnOUBOcWwOUa-GXfs
+
+<> 2023-05-16T164518.200.txt
+
+### 스크랩 취소
+DELETE http://localhost:8080/scrap/1
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJRcDNIcWVtWFNHNFc3MDNKcXI0U3BnPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQxNTIyNzcsImV4cCI6MTY4NDIzODY3N30._1P27BZnZhD8RUBAtFIC0WCq4BsnOUBOcWwOUa-GXfs
+
+<> 2023-05-16T164550.200.txt
