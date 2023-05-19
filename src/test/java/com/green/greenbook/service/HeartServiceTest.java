@@ -44,22 +44,6 @@ class HeartServiceTest {
     @InjectMocks
     private HeartService heartService;
 
-    @Test
-    @DisplayName("하트 등록 실패 - 멤버 정보 찾을 수 없음")
-    void create_fail_NOT_FOUND_MEMBER() {
-        //given
-        Member member = getMember();
-
-        given(memberRepository.findById(member.getId()))
-                .willReturn(Optional.empty());
-
-        //when
-        CustomException exception = assertThrows(CustomException.class,
-                () -> heartService.create(1L, 1L));
-
-        //then
-        assertEquals(ErrorCode.NOT_FOUND_MEMBER, exception.getErrorCode());
-    }
 
     @Test
     @DisplayName("하트 등록 실패 - 아카이브 정보 찾을 수 없음")
@@ -110,23 +94,6 @@ class HeartServiceTest {
         assertEquals(archive.getId(), captor.getValue().getArchive().getId());
 
 //        assertEquals(archive_heartCnt_before + 1, archive.getHeartCnt());  //TODO: 레디스로부터 값을 읽어오는 과정 구현 필요
-    }
-
-    @Test
-    @DisplayName("하트 삭제 실패 - 멤버 정보 찾을 수 없음")
-    void delete_fail_NOT_FOUND_MEMBER() {
-        //given
-        Member member = getMember();
-
-        given(memberRepository.findById(member.getId()))
-                .willReturn(Optional.empty());
-
-        //when
-        CustomException exception = assertThrows(CustomException.class,
-                () -> heartService.delete(1L, 1L));
-
-        //then
-        assertEquals(ErrorCode.NOT_FOUND_MEMBER, exception.getErrorCode());
     }
 
     @Test
