@@ -6,6 +6,7 @@ import com.green.greenbook.domain.model.Member;
 import com.green.greenbook.domain.model.Review;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
+import com.green.greenbook.property.ReviewProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import com.green.greenbook.repository.MemberRepository;
 import com.green.greenbook.repository.ReviewRepository;
@@ -24,6 +25,9 @@ public class ReviewService {
     private final ArchiveRepository archiveRepository;
     private final MemberRepository memberRepository;
 
+    private final ReviewProperty reviewProperty;
+    private final RedissonService redissonService;
+
     public void create(Long archiveId, Long memberId, String head, String content) {
         Archive archive = getArchive(archiveId);
         Member member = getMember(memberId);
@@ -38,6 +42,9 @@ public class ReviewService {
                 .head(head)
                 .content(content)
                 .build();
+
+        String key = redissonService.keyResolver(reviewProperty, Long.toString(reviewRepository.save(review).getId()));
+        redissonService.setValue(key, 0);
 
         reviewRepository.save(review);
     }

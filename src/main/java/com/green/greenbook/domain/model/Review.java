@@ -29,11 +29,6 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "archive_id")
     private Archive archive;
 
-//    @Builder.Default
-//    @OneToMany(mappedBy = "review")
-//    private List<Scrap> scraps
-//            = new ArrayList<>();
-
     private String head;
     private String content;
     private long scrapCnt;

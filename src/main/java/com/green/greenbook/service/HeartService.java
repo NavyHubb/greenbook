@@ -28,11 +28,8 @@ public class HeartService {
     private final RedissonService redissonService;
 
     public void create(Long memberId, Long archiveId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
-
-        Archive archive = archiveRepository.findById(archiveId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
+        Member member = getMember(memberId);
+        Archive archive = getArchive(archiveId);
 
         if (heartRepository.findByMemberAndArchive(member, archive).isPresent()){
             throw new CustomException(ErrorCode.ALREADY_REGISTERED_HEART);
@@ -44,27 +41,37 @@ public class HeartService {
                                     .build());
 
         String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
-        redissonService.updateHeartCnt(key, true);
+        redissonService.updateValue(key, true);
 
-        archive.setHeartCnt(redissonService.getHeartCnt(key));
+        archive.setHeartCnt(redissonService.getValue(key));
     }
 
     public void delete(Long memberId, Long archiveId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
-
-        Archive archive = archiveRepository.findById(archiveId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
-
-        Heart heart = heartRepository.findByMemberAndArchive(member, archive)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HEART));
+        Member member = getMember(memberId);
+        Archive archive = getArchive(archiveId);
+        Heart heart = getHeart(member, archive);
 
         heartRepository.delete(heart);
 
         String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
-        redissonService.updateHeartCnt(key, false);
+        redissonService.updateValue(key, false);
 
-        archive.setHeartCnt(redissonService.getHeartCnt(key));
+        archive.setHeartCnt(redissonService.getValue(key));
+    }
+
+    private Heart getHeart(Member member, Archive archive) {
+        return heartRepository.findByMemberAndArchive(member, archive)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HEART));
+    }
+
+    private Archive getArchive(Long archiveId) {
+        return archiveRepository.findById(archiveId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
+    }
+
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
 }

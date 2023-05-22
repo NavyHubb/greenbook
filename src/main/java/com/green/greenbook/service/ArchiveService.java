@@ -30,7 +30,7 @@ public class ArchiveService {
         Archive archive = createArchive(isbn, title, author, publisher);
 
         String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
-        redissonService.setHeartCnt(key, 0);
+        redissonService.setValue(key, 0);
 
         return archiveRepository.save(archive).toDto();
     }

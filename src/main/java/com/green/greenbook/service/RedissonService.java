@@ -19,24 +19,25 @@ public class RedissonService {
         return String.format(prefix, keyId);
     }
 
-    public void setHeartCnt(String key, int amount) {
+    public void setValue(String key, int amount) {
         redissonClient.getBucket(key).set(String.valueOf(amount));
     }
 
-    public int getHeartCnt(String key) {
+
+    public int getValue(String key) {
         return Integer.parseInt((String) redissonClient.getBucket(key).get());
     }
 
-    public void updateHeartCnt(final String key, boolean isIncrease){
-        int currentHeartCnt = getHeartCnt(key);
+    public void updateValue(final String key, boolean isIncrease){
+        int currentValue = getValue(key);
 
         if (isIncrease) {
-            setHeartCnt(key, currentHeartCnt+1);
+            setValue(key, currentValue+1);
         } else {
-            if (currentHeartCnt <= EMPTY) {
+            if (currentValue <= EMPTY) {
                 throw new CustomException(ErrorCode.EMPTY);
             }
-            setHeartCnt(key, currentHeartCnt-1);
+            setValue(key, currentValue-1);
         }
     }
 
