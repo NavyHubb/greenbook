@@ -5,28 +5,31 @@ import com.green.greenbook.domain.model.Heart;
 import com.green.greenbook.domain.model.Member;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
+import com.green.greenbook.property.ArchiveProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import com.green.greenbook.repository.HeartRepository;
 import com.green.greenbook.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class HeartService {
 
     private final HeartRepository heartRepository;
     private final MemberRepository memberRepository;
     private final ArchiveRepository archiveRepository;
 
-    public void create(Long memberId, Long archiveId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
+    private final ArchiveProperty archiveProperty;
+    private final RedissonService redissonService;
 
-        Archive archive = archiveRepository.findById(archiveId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
+    public void create(Long memberId, Long archiveId) {
+        Member member = getMember(memberId);
+        Archive archive = getArchive(archiveId);
 
         if (heartRepository.findByMemberAndArchive(member, archive).isPresent()){
             throw new CustomException(ErrorCode.ALREADY_REGISTERED_HEART);
@@ -36,23 +39,39 @@ public class HeartService {
                                     .member(member)
                                     .archive(archive)
                                     .build());
-        archive.plusHeart();  // TODO: Thread-safe 처리
-        archiveRepository.save(archive);
+
+        String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
+        redissonService.updateValue(key, true);
+
+        archive.setHeartCnt(redissonService.getValue(key));
     }
 
     public void delete(Long memberId, Long archiveId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
-
-        Archive archive = archiveRepository.findById(archiveId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
-
-        Heart heart = heartRepository.findByMemberAndArchive(member, archive)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HEART));
+        Member member = getMember(memberId);
+        Archive archive = getArchive(archiveId);
+        Heart heart = getHeart(member, archive);
 
         heartRepository.delete(heart);
-        archive.minusHeart();  // TODO: Thread-safe 처리
-        archiveRepository.save(archive);
+
+        String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
+        redissonService.updateValue(key, false);
+
+        archive.setHeartCnt(redissonService.getValue(key));
+    }
+
+    private Heart getHeart(Member member, Archive archive) {
+        return heartRepository.findByMemberAndArchive(member, archive)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HEART));
+    }
+
+    private Archive getArchive(Long archiveId) {
+        return archiveRepository.findById(archiveId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
+    }
+
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
 }

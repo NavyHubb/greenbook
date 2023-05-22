@@ -13,8 +13,8 @@ public enum ErrorCode {
     ALREADY_REGISTERED_BOOKTITLE(HttpStatus.BAD_REQUEST, "이미 등록된 도서명입니다."),
     ALREADY_REGISTERED_ISBN(HttpStatus.BAD_REQUEST, "이미 등록된 ISBN입니다."),
     ALREADY_REGISTERED_HEART(HttpStatus.BAD_REQUEST, "이미 등록된 하트입니다."),
-    ALREADY_REGISTERED_HEAD(HttpStatus.BAD_REQUEST, "이미 등록된 하트입니다."),
-    ALREADY_REGISTERED_SCRAP(HttpStatus.BAD_REQUEST, "이미 등록된 하트입니다."),
+    ALREADY_REGISTERED_HEAD(HttpStatus.BAD_REQUEST, "이미 등록된 제목입니다."),
+    ALREADY_REGISTERED_SCRAP(HttpStatus.BAD_REQUEST, "이미 등록된 스크랩입니다."),
 
     NOT_FOUND_MEMBER(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다."),
     NOT_FOUND_ARCHIVE(HttpStatus.BAD_REQUEST, "아카이브를 찾을 수 없습니다."),
@@ -22,7 +22,11 @@ public enum ErrorCode {
     NOT_FOUND_REVIEW(HttpStatus.BAD_REQUEST, "리뷰를 찾을 수 없습니다."),
     NOT_FOUND_SCRAP(HttpStatus.BAD_REQUEST, "스크랩을 찾을 수 없습니다."),
 
+    TRANSACTION_LOCK(HttpStatus.BAD_REQUEST,"해당 객체는 사용 중입니다."),
+
     NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "인증 정보가 불일치합니다."),
+
+    EMPTY(HttpStatus.BAD_REQUEST, "삭제할 수량이 없습니다."),
 
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다.");
 

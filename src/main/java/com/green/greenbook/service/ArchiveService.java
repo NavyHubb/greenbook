@@ -5,8 +5,11 @@ import com.green.greenbook.domain.dto.ArchiveDto;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
+import com.green.greenbook.property.ArchiveProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArchiveService {
 
     private final ArchiveRepository archiveRepository;
+    private final ArchiveProperty archiveProperty;
+    private final RedissonService redissonService;
 
     public ArchiveDto create(String isbn, String title, String author, String publisher) {
         if (archiveRepository.findByIsbn(isbn).isPresent()) {
@@ -23,6 +28,9 @@ public class ArchiveService {
         }
 
         Archive archive = createArchive(isbn, title, author, publisher);
+
+        String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
+        redissonService.setValue(key, 0);
 
         return archiveRepository.save(archive).toDto();
     }
@@ -35,6 +43,20 @@ public class ArchiveService {
                 .publisher(publisher)
                 .heartCnt(0)
                 .build();
+    }
+
+    public Page<ArchiveDto> getAll(Pageable pageable) {
+        return toDtoList(archiveRepository.findAll(pageable));
+    }
+
+    public Page<ArchiveDto> toDtoList(Page<Archive> archiveList){
+        return archiveList.map(m -> ArchiveDto.builder()
+            .isbn(m.getIsbn())
+            .title(m.getTitle())
+            .author(m.getAuthor())
+            .publisher(m.getPublisher())
+            .heartCnt(m.getHeartCnt())
+            .build());
     }
 
     public Archive get(Long archiveId) {

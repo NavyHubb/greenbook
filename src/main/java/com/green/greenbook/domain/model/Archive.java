@@ -44,7 +44,6 @@ public class Archive {
 
     public ArchiveDto toDto() {
         return ArchiveDto.builder()
-                .reviewList(this.reviewList)
                 .isbn(this.isbn)
                 .title(this.title)
                 .author(this.author)
@@ -70,16 +69,6 @@ public class Archive {
         this.publisher = publisher;
 
         return this;
-    }
-
-    public void plusHeart() {
-        this.heartCnt++;
-    }
-
-    public void minusHeart() {
-        if (this.heartCnt > 0) {
-            this.heartCnt--;
-        }
     }
 
 }
