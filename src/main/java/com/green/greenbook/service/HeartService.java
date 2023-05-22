@@ -45,6 +45,7 @@ public class HeartService {
 
         String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
         redissonService.updateHeartCnt(key, true);
+
         archive.setHeartCnt(redissonService.getHeartCnt(key));
     }
 
@@ -62,6 +63,7 @@ public class HeartService {
 
         String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
         redissonService.updateHeartCnt(key, false);
+
         archive.setHeartCnt(redissonService.getHeartCnt(key));
     }
 
