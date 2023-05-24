@@ -37,10 +37,7 @@ class HeartServiceTest {
     private ArchiveRepository archiveRepository;
     @Mock
     private RedissonClient redissonClient;
-    @Mock
-    private ArchiveProperty archiveProperty;
-    @Mock
-    private RedissonService redissonService;
+
     @InjectMocks
     private HeartService heartService;
 

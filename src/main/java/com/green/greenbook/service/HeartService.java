@@ -5,12 +5,14 @@ import com.green.greenbook.domain.model.Heart;
 import com.green.greenbook.domain.model.Member;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
-import com.green.greenbook.property.ArchiveProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import com.green.greenbook.repository.HeartRepository;
 import com.green.greenbook.repository.MemberRepository;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,39 +26,62 @@ public class HeartService {
     private final MemberRepository memberRepository;
     private final ArchiveRepository archiveRepository;
 
-    private final ArchiveProperty archiveProperty;
-    private final RedissonService redissonService;
+    private final RedissonClient redissonClient;
 
     public void create(Long memberId, Long archiveId) {
-        Member member = getMember(memberId);
-        Archive archive = getArchive(archiveId);
+        final String lockName = "HeartCreateLock: " + archiveId;
+        final RLock lock = redissonClient.getLock(lockName);
 
-        if (heartRepository.findByMemberAndArchive(member, archive).isPresent()){
-            throw new CustomException(ErrorCode.ALREADY_REGISTERED_HEART);
+        try {
+            if(!lock.tryLock(10, 20, TimeUnit.SECONDS))
+                return;
+
+            Member member = getMember(memberId);
+            Archive archive = getArchive(archiveId);
+
+            if (heartRepository.findByMemberAndArchive(member, archive).isPresent()){
+                throw new CustomException(ErrorCode.ALREADY_REGISTERED_HEART);
+            }
+
+            heartRepository.save(Heart.builder()
+                .member(member)
+                .archive(archive)
+                .build());
+
+            archive.setHeartCnt(archive.getHeartCnt() + 1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new CustomException(ErrorCode.TRANSACTION_LOCK);
+        } finally {
+            if(lock != null && lock.isLocked()) {
+                lock.unlock();
+            }
         }
-
-        heartRepository.save(Heart.builder()
-                                    .member(member)
-                                    .archive(archive)
-                                    .build());
-
-        String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
-        redissonService.updateValue(key, true);
-
-        archive.setHeartCnt(redissonService.getValue(key));
     }
 
     public void delete(Long memberId, Long archiveId) {
-        Member member = getMember(memberId);
-        Archive archive = getArchive(archiveId);
-        Heart heart = getHeart(member, archive);
+        final String lockName = "HeartDeleteLock: " + archiveId;
+        final RLock lock = redissonClient.getLock(lockName);
 
-        heartRepository.delete(heart);
+        try {
+            if(!lock.tryLock(1, 3, TimeUnit.SECONDS))
+                return;
 
-        String key = redissonService.keyResolver(archiveProperty, archive.getIsbn());
-        redissonService.updateValue(key, false);
+            Member member = getMember(memberId);
+            Archive archive = getArchive(archiveId);
+            Heart heart = getHeart(member, archive);
 
-        archive.setHeartCnt(redissonService.getValue(key));
+            heartRepository.delete(heart);
+
+            archive.setHeartCnt(archive.getHeartCnt() - 1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new CustomException(ErrorCode.TRANSACTION_LOCK);
+        } finally {
+            if(lock != null && lock.isLocked()) {
+                lock.unlock();
+            }
+        }
     }
 
     private Heart getHeart(Member member, Archive archive) {
