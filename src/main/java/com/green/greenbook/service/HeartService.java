@@ -28,7 +28,7 @@ public class HeartService {
 
     private final RedissonClient redissonClient;
 
-    public void create(Long memberId, Long archiveId) {
+    public void createWithLock(Long memberId, Long archiveId) {
         final String lockName = "HeartCreateLock: " + archiveId;
         final RLock lock = redissonClient.getLock(lockName);
 
@@ -36,19 +36,43 @@ public class HeartService {
             if(!lock.tryLock(10, 20, TimeUnit.SECONDS))
                 return;
 
-            Member member = getMember(memberId);
-            Archive archive = getArchive(archiveId);
-
-            if (heartRepository.findByMemberAndArchive(member, archive).isPresent()){
-                throw new CustomException(ErrorCode.ALREADY_REGISTERED_HEART);
+            create(memberId, archiveId);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new CustomException(ErrorCode.TRANSACTION_LOCK);
+        } finally {
+            if(lock != null && lock.isLocked()) {
+                lock.unlock();
             }
+        }
+    }
 
-            heartRepository.save(Heart.builder()
-                .member(member)
-                .archive(archive)
-                .build());
+    public void create(Long memberId, Long archiveId) {
+        Member member = getMember(memberId);
+        Archive archive = getArchive(archiveId);
 
-            archive.setHeartCnt(archive.getHeartCnt() + 1);
+        if (heartRepository.findByMemberAndArchive(member, archive).isPresent()){
+            throw new CustomException(ErrorCode.ALREADY_REGISTERED_HEART);
+        }
+
+        heartRepository.save(Heart.builder()
+            .member(member)
+            .archive(archive)
+            .build());
+
+        archive.setHeartCnt(archive.getHeartCnt() + 1);
+        archiveRepository.saveAndFlush(archive);
+    }
+
+    public void deleteWithLock(Long memberId, Long archiveId) {
+        final String lockName = "HeartDeleteLock: " + archiveId;
+        final RLock lock = redissonClient.getLock(lockName);
+
+        try {
+            if(!lock.tryLock(1, 3, TimeUnit.SECONDS))
+                return;
+
+            delete(memberId, archiveId);
         } catch (InterruptedException e) {
             e.printStackTrace();
             throw new CustomException(ErrorCode.TRANSACTION_LOCK);
@@ -60,43 +84,29 @@ public class HeartService {
     }
 
     public void delete(Long memberId, Long archiveId) {
-        final String lockName = "HeartDeleteLock: " + archiveId;
-        final RLock lock = redissonClient.getLock(lockName);
+        Member member = getMember(memberId);
+        Archive archive = getArchive(archiveId);
+        Heart heart = getHeart(member, archive);
 
-        try {
-            if(!lock.tryLock(1, 3, TimeUnit.SECONDS))
-                return;
+        heartRepository.delete(heart);
 
-            Member member = getMember(memberId);
-            Archive archive = getArchive(archiveId);
-            Heart heart = getHeart(member, archive);
-
-            heartRepository.delete(heart);
-
-            archive.setHeartCnt(archive.getHeartCnt() - 1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new CustomException(ErrorCode.TRANSACTION_LOCK);
-        } finally {
-            if(lock != null && lock.isLocked()) {
-                lock.unlock();
-            }
-        }
+        archive.setHeartCnt(archive.getHeartCnt() - 1);
+        archiveRepository.saveAndFlush(archive);
     }
 
     private Heart getHeart(Member member, Archive archive) {
         return heartRepository.findByMemberAndArchive(member, archive)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HEART));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HEART));
     }
 
     private Archive getArchive(Long archiveId) {
         return archiveRepository.findById(archiveId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARCHIVE));
     }
 
     private Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
 }

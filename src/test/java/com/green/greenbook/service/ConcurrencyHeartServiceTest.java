@@ -3,13 +3,10 @@ package com.green.greenbook.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.green.greenbook.domain.dto.MemberResponseDto;
 import com.green.greenbook.domain.form.SignUpForm;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.domain.model.Member;
 import com.green.greenbook.repository.ArchiveRepository;
-import com.green.greenbook.repository.HeartRepository;
-import com.green.greenbook.repository.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -21,8 +18,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class ConcurrencyHeartServiceTest {
 
@@ -41,7 +39,7 @@ public class ConcurrencyHeartServiceTest {
     @BeforeEach
     void beforeEach() {
         executorService = Executors.newFixedThreadPool(20);
-        countDownLatch = new CountDownLatch(20);  // 몇개의 스레드가 끝나면 다음 스레드를 시작할지 정한다
+        countDownLatch = new CountDownLatch(20);
     }
 
     @Test
@@ -64,22 +62,24 @@ public class ConcurrencyHeartServiceTest {
             .build();
         Archive savedArchive = archiveRepository.save(archive);
 
+        //when
         IntStream.range(0, 20).forEach(e -> executorService.submit(() -> {
             try {
                 try {
-                    heartService.create(members.get(e).getId(), savedArchive.getId());
+                    heartService.createWithLock(members.get(e).getId(), savedArchive.getId());
                 } catch (Exception exception) {
                     assertThat(exception).isNull();
                 }
             } finally {
-                countDownLatch.countDown();  // 스레드가 끝날 때 마다 카운트를 감소한다
+                countDownLatch.countDown();
             }
         }));
 
-        countDownLatch.await();  // 카운트가 0이되면 대기가 풀리고 이후 스레드가 실행되게 된다
+        countDownLatch.await();
 
         long heartCnt = archiveRepository.findById(archive.getId()).get().getHeartCnt();
 
+        //then
         assertEquals(20, heartCnt);
     }
 
