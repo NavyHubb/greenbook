@@ -6,7 +6,6 @@ import com.green.greenbook.domain.model.Member;
 import com.green.greenbook.domain.model.Review;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
-import com.green.greenbook.property.ReviewProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import com.green.greenbook.repository.MemberRepository;
 import com.green.greenbook.repository.ReviewRepository;

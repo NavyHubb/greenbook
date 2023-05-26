@@ -4,7 +4,6 @@ import com.green.greenbook.domain.dto.ArchiveCreateRequest;
 import com.green.greenbook.domain.model.Archive;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
-import com.green.greenbook.property.ArchiveProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,8 +27,6 @@ class ArchiveServiceTest {
 
     @Mock
     private ArchiveRepository archiveRepository;
-    @Mock
-    private RedissonService redissonService;
     @InjectMocks
     private ArchiveService archiveService;
 
