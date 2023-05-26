@@ -5,7 +5,6 @@ import com.green.greenbook.domain.model.Review;
 import com.green.greenbook.domain.model.Scrap;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
-import com.green.greenbook.property.ReviewProperty;
 import com.green.greenbook.repository.MemberRepository;
 import com.green.greenbook.repository.ReviewRepository;
 import com.green.greenbook.repository.ScrapRepository;
@@ -27,7 +26,7 @@ public class ScrapService {
 
     private final RedissonClient redissonClient;
 
-    public void create(Long memberId, Long reviewId) {
+    public void createWithLock(Long memberId, Long reviewId) {
         final String lockName = "ScrapCreateLock: " + reviewId;
         final RLock lock = redissonClient.getLock(lockName);
 
@@ -35,19 +34,43 @@ public class ScrapService {
             if(!lock.tryLock(1, 3, TimeUnit.SECONDS))
                 return;
 
-            Member member = getMember(memberId);
-            Review review = getReview(reviewId);
-
-            if (scrapRepository.findByMemberAndReview(member, review).isPresent()) {
-                throw new CustomException(ErrorCode.ALREADY_REGISTERED_SCRAP);
+            create(memberId, reviewId);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new CustomException(ErrorCode.TRANSACTION_LOCK);
+        } finally {
+            if(lock != null && lock.isLocked()) {
+                lock.unlock();
             }
+        }
+    }
 
-            scrapRepository.save(Scrap.builder()
-                .member(member)
-                .review(review)
-                .build());
+    public void create(Long memberId, Long reviewId) {
+        Member member = getMember(memberId);
+        Review review = getReview(reviewId);
 
-            review.setScrapCnt(review.getScrapCnt() + 1);
+        if (scrapRepository.findByMemberAndReview(member, review).isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_REGISTERED_SCRAP);
+        }
+
+        scrapRepository.save(Scrap.builder()
+            .member(member)
+            .review(review)
+            .build());
+
+        review.setScrapCnt(review.getScrapCnt() + 1);
+        reviewRepository.saveAndFlush(review);
+    }
+
+    public void deleteWithLock(Long memberId, Long reviewId) {
+        final String lockName = "ScrapDeleteLock: " + reviewId;
+        final RLock lock = redissonClient.getLock(lockName);
+
+        try {
+            if(!lock.tryLock(1, 3, TimeUnit.SECONDS))
+                return;
+
+            delete(memberId, reviewId);
         } catch (InterruptedException e) {
             e.printStackTrace();
             throw new CustomException(ErrorCode.TRANSACTION_LOCK);
@@ -59,28 +82,14 @@ public class ScrapService {
     }
 
     public void delete(Long memberId, Long reviewId) {
-        final String lockName = "ScrapDeleteLock: " + reviewId;
-        final RLock lock = redissonClient.getLock(lockName);
+        Member member = getMember(memberId);
+        Review review = getReview(reviewId);
+        Scrap scrap = getScrap(member, review);
 
-        try {
-            if(!lock.tryLock(1, 3, TimeUnit.SECONDS))
-                return;
+        scrapRepository.delete(scrap);
 
-            Member member = getMember(memberId);
-            Review review = getReview(reviewId);
-            Scrap scrap = getScrap(member, review);
-
-            scrapRepository.delete(scrap);
-
-            review.setScrapCnt(review.getScrapCnt() - 1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new CustomException(ErrorCode.TRANSACTION_LOCK);
-        } finally {
-            if(lock != null && lock.isLocked()) {
-                lock.unlock();
-            }
-        }
+        review.setScrapCnt(review.getScrapCnt() - 1);
+        reviewRepository.saveAndFlush(review);
     }
 
     private Scrap getScrap(Member member, Review review) {

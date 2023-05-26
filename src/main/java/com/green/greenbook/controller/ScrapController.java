@@ -21,7 +21,7 @@ public class ScrapController {
     public ResponseEntity<?> create(@RequestHeader(name = TOKEN_NAME) String token,
                                     @PathVariable Long reviewId) {
         MemberDto dto = provider.getMemberDto(token);
-        scrapService.create(dto.getId(),reviewId);
+        scrapService.createWithLock(dto.getId(),reviewId);
 
         return ResponseEntity.ok("스크랩이 저장되었습니다.");
     }
@@ -30,7 +30,7 @@ public class ScrapController {
     public ResponseEntity<?> delete(@RequestHeader(name = TOKEN_NAME) String token,
                                     @PathVariable Long reviewId) {
         MemberDto dto = provider.getMemberDto(token);
-        scrapService.delete(dto.getId(),reviewId);
+        scrapService.deleteWithLock(dto.getId(),reviewId);
 
         return ResponseEntity.ok("스크랩이 삭제되었습니다.");
     }

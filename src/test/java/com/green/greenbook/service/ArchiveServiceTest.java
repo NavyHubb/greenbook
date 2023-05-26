@@ -29,8 +29,6 @@ class ArchiveServiceTest {
     @Mock
     private ArchiveRepository archiveRepository;
     @Mock
-    private ArchiveProperty archiveProperty;
-    @Mock
     private RedissonService redissonService;
     @InjectMocks
     private ArchiveService archiveService;
