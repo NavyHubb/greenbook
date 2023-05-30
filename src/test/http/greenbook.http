@@ -91,3 +91,26 @@ X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iL
 ### 스크랩 취소
 DELETE http://localhost:8080/scrap/1
 X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJRcDNIcWVtWFNHNFc3MDNKcXI0U3BnPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQxNTIyNzcsImV4cCI6MTY4NDIzODY3N30._1P27BZnZhD8RUBAtFIC0WCq4BsnOUBOcWwOUa-GXfs
+
+### 채팅방 생성
+POST http://localhost:8080/chat/room
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODU0MjAyOTQsImV4cCI6MTY4NTUwNjY5NH0.aoXoTIxpMdjP7JtViZiNFfDlWDZ1DkpeA9sg_7_RxbQ
+
+{
+  "name": "test2"
+}
+
+### 채팅 메세지 전송
+POST http://localhost:8080/chat/msg/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODU0MjAyOTQsImV4cCI6MTY4NTUwNjY5NH0.aoXoTIxpMdjP7JtViZiNFfDlWDZ1DkpeA9sg_7_RxbQ
+
+{
+  "message": "Hello"
+}
+
+### 채팅 메세지 조회
+GET http://localhost:8080/chat/msg/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODU0MjAyOTQsImV4cCI6MTY4NTUwNjY5NH0.aoXoTIxpMdjP7JtViZiNFfDlWDZ1DkpeA9sg_7_RxbQ
