@@ -31,6 +31,17 @@ public class SignUpService {
         return Member.from(memberRepository.save(fromForm(form)));
     }
 
+    public Member signUpTest(SignUpForm form) {
+        if (isEmailExistManager(form.getEmail())) {
+            throw new CustomException(ALREADY_REGISTERED_EMAIL);
+        }
+        if (isNicknameExistManager(form.getNickname())) {
+            throw new CustomException(ALREADY_REGISTERED_NICKNAME);
+        }
+
+        return memberRepository.save(fromForm(form));
+    }
+
     private Member fromForm(SignUpForm form) {
         return Member.builder()
             .email(form.getEmail())

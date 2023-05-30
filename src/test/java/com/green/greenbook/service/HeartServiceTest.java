@@ -5,7 +5,6 @@ import com.green.greenbook.domain.model.Heart;
 import com.green.greenbook.domain.model.Member;
 import com.green.greenbook.exception.CustomException;
 import com.green.greenbook.exception.ErrorCode;
-import com.green.greenbook.property.ArchiveProperty;
 import com.green.greenbook.repository.ArchiveRepository;
 import com.green.greenbook.repository.HeartRepository;
 import com.green.greenbook.repository.MemberRepository;
@@ -18,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import org.redisson.api.RedissonClient;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,12 +33,7 @@ class HeartServiceTest {
     private MemberRepository memberRepository;
     @Mock
     private ArchiveRepository archiveRepository;
-    @Mock
-    private RedissonClient redissonClient;
-    @Mock
-    private ArchiveProperty archiveProperty;
-    @Mock
-    private RedissonService redissonService;
+
     @InjectMocks
     private HeartService heartService;
 
@@ -92,8 +85,7 @@ class HeartServiceTest {
         verify(heartRepository, times(1)).save(captor.capture());
         assertEquals(member.getId(), captor.getValue().getMember().getId());
         assertEquals(archive.getId(), captor.getValue().getArchive().getId());
-
-//        assertEquals(archive_heartCnt_before + 1, archive.getHeartCnt());  //TODO: 레디스로부터 값을 읽어오는 과정 구현 필요
+        assertEquals(archive_heartCnt_before + 1, archive.getHeartCnt());
     }
 
     @Test
@@ -144,8 +136,7 @@ class HeartServiceTest {
         verify(heartRepository, times(1)).delete(captor.capture());
         assertEquals(member.getId(), captor.getValue().getMember().getId());
         assertEquals(archive.getId(), captor.getValue().getArchive().getId());
-
-//        assertEquals(archive_heartCnt_before - 1, archive.getHeartCnt());
+        assertEquals(archive_heartCnt_before - 1, archive.getHeartCnt());
     }
 
 

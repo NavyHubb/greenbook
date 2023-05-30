@@ -25,21 +25,23 @@ public class HeartController {
     @PostMapping("/{archiveId}")
     public ResponseEntity<String> create(@RequestHeader(name = TOKEN_NAME) String token,
                                          @PathVariable Long archiveId) {
+
         MemberDto dto = provider.getMemberDto(token);
 
-        heartService.create(dto.getId(), archiveId);
+        heartService.createWithLock(dto.getId(), archiveId);
 
-        return ResponseEntity.ok("하트 등록이 정상적으로 처리되었습니다.");
+        return ResponseEntity.ok("create success");
     }
 
     @DeleteMapping("/{archiveId}")
     public ResponseEntity<String> delete(@RequestHeader(name = TOKEN_NAME) String token,
                                          @PathVariable Long archiveId) {
+
         MemberDto dto = provider.getMemberDto(token);
 
-        heartService.delete(dto.getId(), archiveId);
+        heartService.deleteWithLock(dto.getId(), archiveId);
 
-        return ResponseEntity.ok("하트 삭제가 정상적으로 처리되었습니다.");
+        return ResponseEntity.ok("delete success");
     }
 
 }
