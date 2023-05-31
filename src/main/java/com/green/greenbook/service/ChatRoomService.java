@@ -75,10 +75,7 @@ public class ChatRoomService {
     public List<ChatRoomDto> findAllRoom(Pageable pageable) {
         Page<ChatRoom> allChatRoom = chatRoomRepository.findAll(pageable);
 
-        return allChatRoom.stream().map(chatRoom -> ChatRoomDto.builder()
-                .chatRoomId(chatRoom.getId())
-                .name(chatRoom.getName())
-                .build())
+        return allChatRoom.stream().map(ChatRoomDto::from)
             .collect(Collectors.toList());
     }
 

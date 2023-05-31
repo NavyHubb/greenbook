@@ -44,11 +44,7 @@ public class ChatMsgController {
         MemberDto dto = provider.getMemberDto(token);
 
         List<ChatMsgResponse> chatMsgList = chatMsgService.getChatMsgList(roomId, dto.getId());
-        if (chatMsgList == null) {
-            return ResponseEntity.ok("empty chat message");
-        } else {
-            return ResponseEntity.ok(chatMsgList);
-        }
+        return ResponseEntity.ok(chatMsgList);
     }
 
 }

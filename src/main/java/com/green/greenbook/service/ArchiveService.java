@@ -72,7 +72,6 @@ public class ArchiveService {
         Archive archive = getArchive(archiveId);
 
         archiveRepository.delete(archive);
-        //TODO: 아카이브 삭제 시 이와 연관된 리뷰와 스크랩 함께 삭제 처리
 
         return "아카이브가 정상적으로 삭제되었습니다.";
     }
