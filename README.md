@@ -26,10 +26,8 @@
    - 특정 아카이브 조회
      - 로그인하지 않은 사용자를 포함한 모든 사용자는 특정 아카이브를 조회할 수 있다.
      - 아카이브 제목(도서명), 저자, 출판사, 좋아요 수, 리뷰 목록이 조회된다.
-     - 조회에 사용되는 검색 기능은 ElasticSearch를 사용한다.
    - 도서 정보 검색
      - 로그인힌 사용자는 도서 정보를 검색(Naver API 활용)할 수 있다.
-     - Naver API로부터의 응답값을 객체화하여 검색결과 목록을 반환한다.
    - 아카이브 생성
      - 로그인한 사용자는 도서 정보 검색 결과 목록 중 자신이 원하는 도서를 선택하여 아카이브를 생성할 수 있다.
    - 아카이브 수정
@@ -60,8 +58,8 @@
 ## ✅ Tech Stack
 - Java(11)
 - Spring Boot(2.7.11), Spring MVC, Spring Data JPA
-- MySQL
+- MySQL, Redis
+- WebSocket
 - JUnit5, Mockito
 - Gradle
-- IntelliJ, DataGrip
-- Git, Sourcetree
+- IntelliJ
