@@ -26,7 +26,7 @@ public class ReviewController {
         MemberDto dto = provider.getMemberDto(token);
         reviewService.create(archiveId, dto.getId(), request.getHead(), request.getContent());
 
-        return ResponseEntity.ok("리뷰가 저장되었습니다.");
+        return ResponseEntity.ok("review create success");
     }
 
     @GetMapping("/{reviewId}")
@@ -49,7 +49,7 @@ public class ReviewController {
         MemberDto dto = provider.getMemberDto(token);
         reviewService.delete(reviewId, dto.getId());
 
-        return ResponseEntity.ok("삭제 처리되었습니다.");
+        return ResponseEntity.ok("review delete success");
     }
 
 }
