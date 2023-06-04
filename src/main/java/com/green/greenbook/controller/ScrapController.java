@@ -23,7 +23,7 @@ public class ScrapController {
         MemberDto dto = provider.getMemberDto(token);
         scrapService.createWithLock(dto.getId(),reviewId);
 
-        return ResponseEntity.ok("스크랩이 저장되었습니다.");
+        return ResponseEntity.ok("scrap create success");
     }
 
     @DeleteMapping("/{reviewId}")
@@ -32,7 +32,7 @@ public class ScrapController {
         MemberDto dto = provider.getMemberDto(token);
         scrapService.deleteWithLock(dto.getId(),reviewId);
 
-        return ResponseEntity.ok("스크랩이 삭제되었습니다.");
+        return ResponseEntity.ok("scrap delete success");
     }
 
 }
