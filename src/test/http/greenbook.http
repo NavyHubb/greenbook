@@ -1,0 +1,116 @@
+### 회원가입
+POST http://localhost:8080/signUp
+Content-Type: application/json
+
+{
+  "email": "test2@naver.com",
+  "name": "string",
+  "password": "pass123!!",
+  "nickname": "patrick3"
+}
+
+### 로그인
+POST http://localhost:8080/signIn
+Content-Type: application/json
+
+{
+  "email": "test2@naver.com",
+  "password": "pass123!!"
+}
+
+### 도서 검색
+GET http://localhost:8080/book
+Content-Type: application/json
+
+{
+  "title": "해리포터"
+}
+
+<> 2023-05-10T154205.200.json
+
+### 아카이브 생성
+POST http://localhost:8080/archive
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ5MTA3NjYsImV4cCI6MTY4NDk5NzE2Nn0.qUChVfbUcwB64nlEQ8Lut63DY-XfmnMCF9KBFeTEzuY
+
+{
+  "isbn": "11112222",
+  "author": "김성재",
+  "publisher": "민음사",
+  "title": "사랑이라 쓰고 나니 아모고토 못하겠다"
+}
+
+### 아카이브 삭제
+DELETE http://localhost:8080/archive/1
+
+### 아카이브 조회
+GET http://localhost:8080/archive/5
+
+### 하트 등록
+POST http://localhost:8080/heart/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ5MTE5MDEsImV4cCI6MTY4NDk5ODMwMX0.QXVBfBd9zUykFOb3ENE9qYu2kYh5iaIYKL3bBPhTTh8
+
+
+### 하트 등록2
+POST http://localhost:8080/heart/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJTdWJIZUtVUlJyZVFZK1dTT25Ca3RnPT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ0NzY5ODgsImV4cCI6MTY4NDU2MzM4OH0.oWJP8kfLioLTpT_zvD0VHt8m9no-R-aU3TsHDaZCPp4
+
+### 하트 취소
+DELETE http://localhost:8080/heart/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ5MTE5MDEsImV4cCI6MTY4NDk5ODMwMX0.QXVBfBd9zUykFOb3ENE9qYu2kYh5iaIYKL3bBPhTTh8
+
+### 하트 취소2
+DELETE http://localhost:8080/heart/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJTdWJIZUtVUlJyZVFZK1dTT25Ca3RnPT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ0NjMwODgsImV4cCI6MTY4NDU0OTQ4OH0.LORcFOSCo0a3u7Fk0nYSuejkArJW1jGEQbizu0QtJTE
+
+
+### 리뷰 생성
+POST http://localhost:8080/review?archiveId=1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ5MTA3NjYsImV4cCI6MTY4NDk5NzE2Nn0.qUChVfbUcwB64nlEQ8Lut63DY-XfmnMCF9KBFeTEzuY
+
+{
+  "head": "So dumb",
+  "content": "d"
+}
+
+### 리뷰 조회
+GET http://localhost:8080/review/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ5MTA3NjYsImV4cCI6MTY4NDk5NzE2Nn0.qUChVfbUcwB64nlEQ8Lut63DY-XfmnMCF9KBFeTEzuY
+
+### 스크랩 등록
+POST http://localhost:8080/scrap/2
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQ5MTA3NjYsImV4cCI6MTY4NDk5NzE2Nn0.qUChVfbUcwB64nlEQ8Lut63DY-XfmnMCF9KBFeTEzuY
+
+
+### 스크랩 취소
+DELETE http://localhost:8080/scrap/1
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJRcDNIcWVtWFNHNFc3MDNKcXI0U3BnPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODQxNTIyNzcsImV4cCI6MTY4NDIzODY3N30._1P27BZnZhD8RUBAtFIC0WCq4BsnOUBOcWwOUa-GXfs
+
+### 채팅방 생성
+POST http://localhost:8080/chat/room
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODU0MjAyOTQsImV4cCI6MTY4NTUwNjY5NH0.aoXoTIxpMdjP7JtViZiNFfDlWDZ1DkpeA9sg_7_RxbQ
+
+{
+  "name": "test2"
+}
+
+### 채팅 메세지 전송
+POST http://localhost:8080/chat/msg/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODU0MjAyOTQsImV4cCI6MTY4NTUwNjY5NH0.aoXoTIxpMdjP7JtViZiNFfDlWDZ1DkpeA9sg_7_RxbQ
+
+{
+  "message": "Hello"
+}
+
+### 채팅 메세지 조회
+GET http://localhost:8080/chat/msg/1
+Content-Type: application/json
+X-AUTH-TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzWDNSZjgweDVzYnNnajRzdnZVbExRPT0iLCJqdGkiOiJDbVlEdjVNSzVZVXlpazhLR05Ed293PT0iLCJyb2xlcyI6IlVTRVIiLCJpYXQiOjE2ODU0MjAyOTQsImV4cCI6MTY4NTUwNjY5NH0.aoXoTIxpMdjP7JtViZiNFfDlWDZ1DkpeA9sg_7_RxbQ
