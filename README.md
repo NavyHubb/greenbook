@@ -60,7 +60,7 @@
 - Spring Boot(2.7.11), Spring MVC, Spring Data JPA
 - MySQL, Redis
 - WebSocket
-- AWS (EC2, RDS, ElastiCache)
+- AWS (EC2, RDS, ElastiCache), Docker, Jenkins
 - JUnit5, Mockito
 - Gradle
 - IntelliJ
