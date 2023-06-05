@@ -32,11 +32,11 @@ public class SignUpController {
         return ResponseEntity.ok(signUpService.signUp(form));
     }
 
-    private ResponseEntity<Object> validate(Errors errors) {
+    private void validate(Errors errors) {
         List<ErrorResponse> errorResponses = new ArrayList<>();
-        errors.getAllErrors().stream().forEach(e -> errorResponses.add(ErrorResponse.of(e)));
+        errors.getAllErrors().forEach(e -> errorResponses.add(ErrorResponse.of(e)));
 
-        return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
+        new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
     }
 
 }
